@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kalkulator Avg &amp; Right Issue</title>
+<meta name="description" content="Hitung harga rata-rata saham setelah beli lagi, atau dana tebus HMETD saat right issue.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+          <rect x="5.25" y="4" width="1.5" height="16" rx=".75"/>
+          <rect x="4" y="8" width="4" height="8" rx="1"/>
+          <rect x="11.25" y="2" width="1.5" height="13" rx=".75"/>
+          <rect x="10" y="4.5" width="4" height="7" rx="1"/>
+          <rect x="17.25" y="7" width="1.5" height="15" rx=".75"/>
+          <rect x="16" y="10.5" width="4" height="7.5" rx="1"/>
+        </svg>
+      </span>
+      <div class="brand-text">
+        <h1>Kalkulator Avg &amp; Right Issue</h1>
+        <p>Pilih yang mau dihitung: harga rata-rata setelah beli lagi, atau dana tebus saat right issue.</p>
+      </div>
+    </div>
+    <span class="lotchip">1 lot = 100 lembar</span>
+  </header>
+
+  <div class="modes" role="tablist" aria-label="Pilih kalkulator">
+    <button type="button" class="mode" role="tab" id="tab-avg" data-mode="avg" aria-controls="panel-avg" aria-selected="true">
+      <span class="mode-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18l5-6 4 3 8-9"/><path d="M3 12.5h18" stroke-dasharray="2 3"/></svg>
+      </span>
+      <span class="mode-text"><b>Hitung Avg</b><small>Harga rata-rata setelah beli lagi</small></span>
+    </button>
+    <button type="button" class="mode" role="tab" id="tab-ri" data-mode="ri" aria-controls="panel-ri" aria-selected="false" tabindex="-1">
+      <span class="mode-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4z"/><path d="M12 9.5v5M9.5 12h5"/></svg>
+      </span>
+      <span class="mode-text"><b>Right Issue</b><small>Dana tebus HMETD dan harga teoritis</small></span>
+    </button>
+  </div>
+
+  <main>
+    <!-- ================= HITUNG AVG ================= -->
+    <section class="mode-panel" id="panel-avg" role="tabpanel" aria-labelledby="tab-avg" data-panel="avg">
+      <div class="layout-top">
+        <section class="panel form-panel" aria-labelledby="avg-form-title">
+          <div class="panel-head">
+            <h2 id="avg-form-title">Data kamu</h2>
+            <button type="button" class="btn-text" data-action="clear">Kosongkan</button>
+          </div>
+          <p class="sample-note" data-ref="sampleNote" hidden>Terisi angka contoh. Ganti dengan data milikmu.</p>
+
+          <form autocomplete="off" novalidate>
+            <fieldset class="group">
+              <legend class="step"><span class="step-n">1</span>Posisi sekarang</legend>
+              <div class="group-body">
+                <div class="row-2">
+                  <div class="field">
+                    <div class="field-label"><label for="avg-code">Kode saham</label><span class="opt">opsional</span></div>
+                    <div class="control">
+                      <input id="avg-code" type="text" maxlength="4" placeholder="ABCD" autocapitalize="characters" spellcheck="false" class="is-code" data-code>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label"><label for="avg-qty">Jumlah dimiliki</label></div>
+                    <div class="control">
+                      <input id="avg-qty" type="text" inputmode="numeric" placeholder="0" data-num aria-describedby="avg-qty-hint">
+                      <div class="seg" role="group" aria-label="Satuan jumlah">
+                        <button type="button" data-action="unit" data-unit="lot" aria-pressed="true">lot</button>
+                        <button type="button" data-action="unit" data-unit="lembar" aria-pressed="false">lembar</button>
+                      </div>
+                    </div>
+                    <p class="hint" id="avg-qty-hint" data-ref="qtyHint"></p>
+                  </div>
+                </div>
+                <div class="row-2 row-2--even">
+                  <div class="field">
+                    <div class="field-label"><label for="avg-avg">Harga rata-rata (avg)</label></div>
+                    <div class="control">
+                      <span class="affix">Rp</span>
+                      <input id="avg-avg" type="text" inputmode="decimal" placeholder="0" data-num data-decimal="true">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label"><label for="avg-market">Harga pasar sekarang</label><span class="opt">opsional</span></div>
+                    <div class="control">
+                      <span class="affix">Rp</span>
+                      <input id="avg-market" type="text" inputmode="numeric" placeholder="0" data-num>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend class="step"><span class="step-n">2</span>Pembelian baru</legend>
+              <div class="group-body">
+                <div class="buy-head" aria-hidden="true">
+                  <span></span><span data-ref="unitText">Jumlah (lot)</span><span>Harga beli</span><span></span>
+                </div>
+                <div class="buys" data-ref="buys"></div>
+                <button type="button" class="btn-add" data-action="add-buy" data-ref="addBuy">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  Tambah pembelian
+                </button>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+
+        <aside class="side" aria-label="Hasil hitung avg">
+          <section class="ticket" id="avg-ticket" aria-labelledby="avg-ticket-title">
+            <h2 id="avg-ticket-title" class="sr-only">Hasil hitung avg</h2>
+            <div class="ticket-head">
+              <span class="ticker" data-ref="ticker">SAHAM</span>
+              <span class="t-meta" data-ref="tMeta">Average</span>
+            </div>
+            <div class="t-block">
+              <p class="t-label">Harga rata-rata baru</p>
+              <div class="t-avg-row">
+                <p class="t-big" data-ref="tBig">—</p>
+                <span class="delta" data-ref="tDelta" hidden></span>
+              </div>
+              <p class="t-sub" data-ref="tSub"></p>
+            </div>
+            <div class="perf" aria-hidden="true"></div>
+            <div class="t-stats" data-ref="tStats"></div>
+            <div class="t-foot">
+              <p class="t-note" data-ref="tNote"></p>
+              <div class="t-actions">
+                <button type="button" class="btn-hero" data-action="copy" data-ref="btnCopy" hidden>
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                  Salin ringkasan
+                </button>
+                <button type="button" class="btn-hero btn-hero--accent" data-action="sample" data-ref="btnSample" hidden>Isi contoh</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel map-panel" aria-labelledby="avg-map-title">
+            <div class="panel-head"><h2 id="avg-map-title">Peta harga</h2></div>
+            <div class="pmap" data-ref="pmap">
+              <div class="pm-row" data-ref="pmTop"></div>
+              <div class="pm-track"><div class="pm-range" data-ref="pmRange"></div><div data-ref="pmDots"></div></div>
+              <div class="pm-row pm-row--bottom" data-ref="pmBottom"></div>
+            </div>
+            <p class="hint map-note" data-ref="mapNote"></p>
+          </section>
+        </aside>
+      </div>
+
+      <div class="layout-bottom">
+        <section class="panel" aria-labelledby="avg-ledger-title">
+          <div class="panel-head"><h2 id="avg-ledger-title">Rincian</h2></div>
+          <dl class="ledger" data-ref="ledger"></dl>
+        </section>
+
+        <section class="panel" aria-labelledby="avg-target-title">
+          <div class="panel-head"><h2 id="avg-target-title">Target avg</h2></div>
+          <p class="panel-lead">Berapa lot yang perlu dibeli supaya avg sampai ke angka tertentu. Dihitung dari posisi sekarang, tanpa pembelian di langkah 2.</p>
+          <div class="row-2 row-2--even">
+            <div class="field">
+              <div class="field-label"><label for="avg-target">Target avg</label></div>
+              <div class="control">
+                <span class="affix">Rp</span>
+                <input id="avg-target" type="text" inputmode="decimal" placeholder="0" data-num data-decimal="true">
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-label"><label for="avg-target-price">Harga beli</label></div>
+              <div class="control">
+                <span class="affix">Rp</span>
+                <input id="avg-target-price" type="text" inputmode="numeric" placeholder="0" data-num>
+              </div>
+            </div>
+          </div>
+          <div class="tg-result" data-ref="tgResult"></div>
+        </section>
+      </div>
+
+      <details class="panel howto">
+        <summary><span>Cara hitung &amp; istilah</span><span class="sum-ico" aria-hidden="true"></span></summary>
+        <div class="howto-body">
+          <div>
+            <h3 class="mini-title">Rumus</h3>
+            <ul class="formulas">
+              <li><span>Avg baru</span><code>(lembar lama × avg lama + Σ lembar beli × harga beli) ÷ (lembar lama + Σ lembar beli)</code></li>
+              <li><span>Untung/rugi</span><code>total lembar × harga pasar − total modal</code><small>Belum termasuk biaya broker dan pajak.</small></li>
+              <li><span>Lembar untuk target avg</span><code>lembar lama × (avg lama − target) ÷ (target − harga beli)</code><small>Dibulatkan ke atas ke lot terdekat.</small></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="mini-title">Istilah</h3>
+            <dl class="glossary">
+              <div><dt>Average down</dt><dd>Membeli lagi di harga lebih rendah dari avg supaya harga rata-rata turun.</dd></div>
+              <div><dt>Average up</dt><dd>Membeli lagi di harga lebih tinggi dari avg, biasanya saat tren naik. Harga rata-rata ikut naik.</dd></div>
+              <div><dt>Odd lot</dt><dd>Kepemilikan kurang dari 1 lot (di bawah 100 lembar).</dd></div>
+            </dl>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ================= RIGHT ISSUE ================= -->
+    <section class="mode-panel" id="panel-ri" role="tabpanel" aria-labelledby="tab-ri" data-panel="ri" hidden>
+      <div class="layout-top">
+        <section class="panel form-panel" aria-labelledby="ri-form-title">
+          <div class="panel-head">
+            <h2 id="ri-form-title">Data kamu</h2>
+            <button type="button" class="btn-text" data-action="clear">Kosongkan</button>
+          </div>
+          <p class="sample-note" data-ref="sampleNote" hidden>Terisi angka contoh. Ganti dengan data milikmu.</p>
+
+          <form autocomplete="off" novalidate>
+            <fieldset class="group">
+              <legend class="step"><span class="step-n">1</span>Saham yang kamu pegang</legend>
+              <div class="group-body">
+                <div class="row-2">
+                  <div class="field">
+                    <div class="field-label"><label for="ri-code">Kode saham</label><span class="opt">opsional</span></div>
+                    <div class="control">
+                      <input id="ri-code" type="text" maxlength="4" placeholder="ABCD" autocapitalize="characters" spellcheck="false" class="is-code" data-code>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label"><label for="ri-qty">Jumlah saat cum date</label></div>
+                    <div class="control">
+                      <input id="ri-qty" type="text" inputmode="numeric" placeholder="0" data-num aria-describedby="ri-qty-hint">
+                      <div class="seg" role="group" aria-label="Satuan jumlah">
+                        <button type="button" data-action="unit" data-unit="lot" aria-pressed="true">lot</button>
+                        <button type="button" data-action="unit" data-unit="lembar" aria-pressed="false">lembar</button>
+                      </div>
+                    </div>
+                    <p class="hint" id="ri-qty-hint" data-ref="qtyHint"></p>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend class="step"><span class="step-n">2</span>Ketentuan right issue</legend>
+              <div class="group-body">
+                <div class="field">
+                  <div class="field-label"><span id="ri-ratio-label">Rasio saham lama : HMETD</span></div>
+                  <div class="ratio" role="group" aria-labelledby="ri-ratio-label">
+                    <div class="ratio-cell">
+                      <div class="control control--center">
+                        <input id="ri-ra" type="text" inputmode="numeric" placeholder="10" data-num aria-label="Jumlah saham lama dalam rasio">
+                      </div>
+                      <span class="ratio-cap">saham lama</span>
+                    </div>
+                    <span class="colon" aria-hidden="true">:</span>
+                    <div class="ratio-cell">
+                      <div class="control control--center">
+                        <input id="ri-rb" type="text" inputmode="numeric" placeholder="3" data-num aria-label="Jumlah HMETD dalam rasio">
+                      </div>
+                      <span class="ratio-cap">HMETD</span>
+                    </div>
+                  </div>
+                  <p class="hint" data-ref="ratioHint"></p>
+                </div>
+                <div class="row-2 row-2--even">
+                  <div class="field">
+                    <div class="field-label"><label for="ri-price">Harga tebus</label></div>
+                    <div class="control">
+                      <span class="affix">Rp</span>
+                      <input id="ri-price" type="text" inputmode="numeric" placeholder="0" data-num>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="field-label"><label for="ri-market">Harga saat cum</label><span class="opt">opsional</span></div>
+                    <div class="control">
+                      <span class="affix">Rp</span>
+                      <input id="ri-market" type="text" inputmode="numeric" placeholder="0" data-num>
+                    </div>
+                  </div>
+                </div>
+                <p class="hint hint--tight">Harga saat cum date dipakai untuk menghitung harga teoritis setelah ex-date dan nilai HMETD.</p>
+              </div>
+            </fieldset>
+
+            <fieldset class="group">
+              <legend class="step"><span class="step-n">3</span>Berapa HMETD yang mau ditebus?</legend>
+              <div class="group-body">
+                <div class="ex-top">
+                  <p class="ex-count"><output data-ref="exCount" for="ri-exercise">0</output> <span data-ref="exOf">HMETD</span></p>
+                  <span class="ex-pct" data-ref="exPct">100%</span>
+                </div>
+                <input type="range" id="ri-exercise" min="0" max="0" step="1" value="0" aria-label="Jumlah HMETD yang ditebus">
+                <div class="chips" role="group" aria-label="Pilih porsi cepat">
+                  <button type="button" class="chip" data-action="share" data-share="0">0%</button>
+                  <button type="button" class="chip" data-action="share" data-share="0.25">25%</button>
+                  <button type="button" class="chip" data-action="share" data-share="0.5">50%</button>
+                  <button type="button" class="chip" data-action="share" data-share="0.75">75%</button>
+                  <button type="button" class="chip" data-action="share" data-share="1">Semua</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </section>
+
+        <aside class="side" aria-label="Hasil hitung right issue">
+          <section class="ticket" id="ri-ticket" aria-labelledby="ri-ticket-title">
+            <h2 id="ri-ticket-title" class="sr-only">Hasil hitung right issue</h2>
+            <div class="ticket-head">
+              <span class="ticker" data-ref="ticker">SAHAM</span>
+              <span class="t-meta" data-ref="tMeta">Rasio —</span>
+            </div>
+            <div class="t-block">
+              <p class="t-label">Dana yang perlu disiapkan</p>
+              <p class="t-big" data-ref="tBig">—</p>
+              <p class="t-sub" data-ref="tSub"></p>
+            </div>
+            <div class="perf" aria-hidden="true"></div>
+            <div class="t-stats" data-ref="tStats"></div>
+            <div class="t-foot">
+              <p class="t-note" data-ref="tNote"></p>
+              <div class="t-actions">
+                <button type="button" class="btn-hero" data-action="copy" data-ref="btnCopy" hidden>
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                  Salin ringkasan
+                </button>
+                <button type="button" class="btn-hero btn-hero--accent" data-action="sample" data-ref="btnSample" hidden>Isi contoh</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel map-panel" aria-labelledby="ri-map-title">
+            <div class="panel-head"><h2 id="ri-map-title">Peta harga</h2></div>
+            <div class="pmap" data-ref="pmap">
+              <div class="pm-row" data-ref="pmTop"></div>
+              <div class="pm-track"><div class="pm-range" data-ref="pmRange"></div><div data-ref="pmDots"></div></div>
+              <div class="pm-row pm-row--bottom" data-ref="pmBottom"></div>
+            </div>
+            <p class="hint map-note" data-ref="mapNote"></p>
+          </section>
+
+          <button type="button" class="handoff" data-action="to-avg" data-ref="btnToAvg" hidden>
+            <span><b>Mau tahu avg setelah tebus?</b><small>Bawa data ini ke Hitung Avg</small></span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </aside>
+      </div>
+
+      <div class="layout-bottom">
+        <section class="panel" aria-labelledby="ri-ledger-title">
+          <div class="panel-head"><h2 id="ri-ledger-title">Rincian</h2></div>
+          <dl class="ledger" data-ref="ledger"></dl>
+        </section>
+
+        <section class="panel" aria-labelledby="ri-scen-title">
+          <div class="panel-head">
+            <h2 id="ri-scen-title">Tebus, jual, atau biarkan?</h2>
+            <span class="tag" data-ref="scenTag" hidden></span>
+          </div>
+          <div class="scen" data-ref="scen"></div>
+          <p class="hint scen-note" data-ref="scenNote"></p>
+        </section>
+      </div>
+
+      <details class="panel howto">
+        <summary><span>Cara hitung &amp; istilah</span><span class="sum-ico" aria-hidden="true"></span></summary>
+        <div class="howto-body">
+          <div>
+            <h3 class="mini-title">Rumus (rasio A : B)</h3>
+            <ul class="formulas">
+              <li><span>HMETD diterima</span><code>⌊ lembar lama × B ÷ A ⌋</code><small>Pecahan HMETD dibulatkan ke bawah.</small></li>
+              <li><span>Dana tebus</span><code>HMETD ditebus × harga tebus</code></li>
+              <li><span>Harga teoritis</span><code>(A × harga cum + B × harga tebus) ÷ (A + B)</code><small>Perkiraan harga setelah ex-date, sering disebut TERP.</small></li>
+              <li><span>Nilai teoritis 1 HMETD</span><code>harga teoritis − harga tebus</code></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="mini-title">Istilah</h3>
+            <dl class="glossary">
+              <div><dt>HMETD</dt><dd>Hak Memesan Efek Terlebih Dahulu. Hak untuk membeli 1 saham baru di harga tebus. Bisa ditebus, dijual, atau dibiarkan hangus.</dd></div>
+              <div><dt>Cum date</dt><dd>Hari terakhir membeli saham di pasar reguler agar berhak mendapat HMETD.</dd></div>
+              <div><dt>Ex date</dt><dd>Hari pertama saham diperdagangkan tanpa hak HMETD. Harga biasanya menyesuaikan ke arah harga teoritis.</dd></div>
+              <div><dt>Odd lot</dt><dd>Kepemilikan kurang dari 1 lot (di bawah 100 lembar), sering muncul setelah right issue.</dd></div>
+            </dl>
+          </div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Hasil simulasi untuk membantu menghitung, bukan rekomendasi beli atau jual. Belum termasuk biaya broker dan pajak. Data yang kamu isi hanya tersimpan di browser ini.</p>
+  </footer>
+</div>
+
+<div class="dock" id="dock" hidden>
+  <div class="dock-item"><span id="d-label-1">—</span><strong id="d-val-1">—</strong></div>
+  <div class="dock-item"><span id="d-label-2">—</span><strong id="d-val-2">—</strong></div>
+  <button type="button" class="dock-btn" id="dock-btn">Lihat hasil</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
